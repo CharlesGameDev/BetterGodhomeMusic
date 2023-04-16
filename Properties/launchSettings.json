@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Hollow Knight": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\charl\\Documents\\Hollow Knight (Modded)\\Hollow Knight.exe",
+      "workingDirectory": "C:\\Users\\charl\\Documents\\Hollow Knight (Modded)"
+    }
+  }
+}
