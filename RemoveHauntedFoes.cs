@@ -1,4 +1,6 @@
-﻿using Modding;
+﻿//#define DEBUG_MESSAGES
+
+using Modding;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,11 +20,13 @@ namespace RemoveHauntedFoes
         public static Dictionary<string, AudioClip> soundDict;
         public static Dictionary<string, Texture2D> imageDict;
         string currentScene;
+        bool GRIMM = true;
         bool NKG = true;
         bool NOSK = true;
+        bool ABSRAD = true;
 
         new public string GetName() => "Remove Haunted Foes";
-        public override string GetVersion() => "v1.0.0.1";
+        public override string GetVersion() => "v1.0.0.2";
         public override void Initialize()
         {
             dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -42,6 +46,23 @@ namespace RemoveHauntedFoes
         {
             return new List<IMenuMod.MenuEntry>
             {
+                new IMenuMod.MenuEntry {
+                    Name = "Troupe Master Grimm",
+                    Description = "Use new Troupe Master Grimm music",
+                    Values = new string[] {
+                        "Off",
+                        "On"
+                    },
+                    Saver = opt => GRIMM = opt switch {
+                        0 => false,
+                        1 => true,
+                        _ => throw new InvalidOperationException()
+                    },
+                    Loader = () => GRIMM switch {
+                        false => 0,
+                        true => 1,
+                    }
+                },
                 new IMenuMod.MenuEntry {
                     Name = "Nightmare King Grimm",
                     Description = "Use new NKG music",
@@ -76,12 +97,29 @@ namespace RemoveHauntedFoes
                         true => 1,
                     }
                 },
+                new IMenuMod.MenuEntry {
+                    Name = "Absolute Radiance",
+                    Description = "Use new Absolute Radiance music",
+                    Values = new string[] {
+                        "Off",
+                        "On"
+                    },
+                    Saver = opt => ABSRAD = opt switch {
+                        0 => false,
+                        1 => true,
+                        _ => throw new InvalidOperationException()
+                    },
+                    Loader = () => ABSRAD switch {
+                        false => 0,
+                        true => 1,
+                    }
+                },
             };
         }
 
         IEnumerator BeginApplyMusicCue(On.AudioManager.orig_BeginApplyMusicCue orig, AudioManager self, MusicCue musicCue, float delayTime, float transitionTime, bool applySnapshot)
         {
-            //DebugLog("Music cue: " + musicCue.name);
+            DebugLog("Music cue: " + musicCue.name);
 
             MusicCue.MusicChannelInfo[] infos = ReflectionHelper.GetField<MusicCue, MusicCue.MusicChannelInfo[]>(musicCue, "channelInfos");
             bool changed = false;
@@ -105,9 +143,9 @@ namespace RemoveHauntedFoes
         public AudioClip GetAudioClip(string name)
         {
             if (NKG && ((name == "GG Sad" || name == "NightmareGrimm") && currentScene == "GG_Grimm_Nightmare")) return musicDict["nkg"];
-            //if (GRIMM && ((name == "GG Sad" || name == "Grimm") && currentScene == "GG_Grimm")) return musicDict["grimm"];
+            if (GRIMM && ((name == "GG Sad" || name == "Grimm") && currentScene == "GG_Grimm")) return musicDict["grimm"];
             if (NOSK && ((name == "GG Sad" || name == "MimicSpider") && (currentScene == "GG_Nosk_Hornet" || currentScene == "GG_Nosk"))) return musicDict["nosk"];
-
+            if (ABSRAD && name == "Radiance" && currentScene == "GG_Radiance") return musicDict["absrad"];
 
             return null;
         }
@@ -116,7 +154,7 @@ namespace RemoveHauntedFoes
         {
             if (File.Exists($"{dir}/{origName}.wav"))
             {
-                //DebugLog($"Using audio file \"{origName}.wav\"");
+                DebugLog($"Using audio file \"{origName}.wav\"");
                 FileStream stream = File.OpenRead($"{dir}/{origName}.wav");
                 WavData.Inspect(stream, null);
                 WavData wavData = new();
@@ -135,27 +173,27 @@ namespace RemoveHauntedFoes
                 float[] wavSoundData = wavData.GetSamples();
                 AudioClip audioClip = AudioClip.Create(origName, wavSoundData.Length / wavData.FormatChunk.NumChannels, wavData.FormatChunk.NumChannels, (int)wavData.FormatChunk.SampleRate, false);
                 audioClip.SetData(wavSoundData, 0);
-                //DebugLog($"Loaded \"{origName}.wav\"");
+                DebugLog($"Loaded \"{origName}.wav\"");
                 return audioClip;
             }
 
-            //DebugLog($"File not found for \"{origName}\"");
+            DebugLog($"File not found for \"{origName}\"");
             return null;
         }
 
         public string BeforeSceneLoad(string newSceneName)
         {
             currentScene = newSceneName;
-            Log($"new scene is {newSceneName}");
+            DebugLog($"new scene is {newSceneName}");
             return newSceneName;
         }
 
-        /*
-        public static void DebugLog(string msg)
+        public void DebugLog(string msg)
         {
-            Modding.Logger.Log(msg);
+#if DEBUG_MESSAGES
+            Log(msg);
             Debug.Log("[RemoveHauntedFoes] - " + msg);
+#endif
         }
-        */
     }
 }
