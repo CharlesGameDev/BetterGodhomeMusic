@@ -1,11 +1,11 @@
 ﻿<!-- Credit to SFGrenade https://github.com/SFGrenade -->
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<RootNamespace>RemoveHauntedFoes</RootNamespace>
-		<AssemblyName>RemoveHauntedFoes</AssemblyName>
+		<RootNamespace>BetterGodhomeMusic</RootNamespace>
+		<AssemblyName>BetterGodhomeMusic</AssemblyName>
 		<TargetFramework>net472</TargetFramework>
-		<AssemblyTitle>RemoveHauntedFoes</AssemblyTitle>
-		<Product>RemoveHauntedFoes</Product>
+		<AssemblyTitle>BetterGodhomeMusic</AssemblyTitle>
+		<Product>BetterGodhomeMusic</Product>
 		<Description>A Hollow Knight mod.</Description>
 		<Copyright>Copyright © </Copyright>
 		<AssemblyVersion>1.0.0.2</AssemblyVersion>
@@ -56,7 +56,7 @@
 		<WriteLinesToFile File="Version.txt" Lines="$(OutputFileString)" Overwrite="true" Encoding="UTF-8" />
 	</Target>
 	<ItemGroup>
-		<ResItemsMusic Include="Resources/Music/*.*" />
+		<ResItemsMusic Include="Resources/Music/*.wav" />
 	</ItemGroup>
 	<Target Condition="'$(Configuration)' == 'Debug'" Name="CopyMod" AfterTargets="PostBuildEvent">
 		<RemoveDir Condition="Exists('$(ModsPath)/$(TargetName)')" Directories="$(ModsPath)/$(TargetName)" />

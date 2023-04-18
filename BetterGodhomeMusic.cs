@@ -1,4 +1,4 @@
-﻿//#define DEBUG_MESSAGES
+﻿#define DEBUG_MESSAGES
 
 using Modding;
 using System;
@@ -9,9 +9,9 @@ using System.Reflection;
 using UnityEngine;
 using WavLib;
 
-namespace RemoveHauntedFoes
+namespace BetterGodhomeMusic
 {
-    public class RemoveHauntedFoes : Mod, IMenuMod
+    public class BetterGodhomeMusic : Mod, IMenuMod
     {
         public bool ToggleButtonInsideMenu => throw new NotImplementedException();
         string dir;
@@ -24,6 +24,7 @@ namespace RemoveHauntedFoes
         bool NKG = true;
         bool NOSK = true;
         bool ABSRAD = true;
+        bool HIVEKNIGHT = true;
 
         new public string GetName() => "Remove Haunted Foes";
         public override string GetVersion() => "v1.0.0.2";
@@ -114,6 +115,23 @@ namespace RemoveHauntedFoes
                         true => 1,
                     }
                 },
+                new IMenuMod.MenuEntry {
+                    Name = "Hive Knight",
+                    Description = "Use new Hive Knight music",
+                    Values = new string[] {
+                        "Off",
+                        "On"
+                    },
+                    Saver = opt => HIVEKNIGHT = opt switch {
+                        0 => false,
+                        1 => true,
+                        _ => throw new InvalidOperationException()
+                    },
+                    Loader = () => HIVEKNIGHT switch {
+                        false => 0,
+                        true => 1,
+                    }
+                },
             };
         }
 
@@ -146,6 +164,7 @@ namespace RemoveHauntedFoes
             if (GRIMM && ((name == "GG Sad" || name == "Grimm") && currentScene == "GG_Grimm")) return musicDict["grimm"];
             if (NOSK && ((name == "GG Sad" || name == "MimicSpider") && (currentScene == "GG_Nosk_Hornet" || currentScene == "GG_Nosk"))) return musicDict["nosk"];
             if (ABSRAD && name == "Radiance" && currentScene == "GG_Radiance") return musicDict["absrad"];
+            if (HIVEKNIGHT && (name == "HiveKnight" || name == "GG Normal") && currentScene == "GG_Hive_Knight") return musicDict["hiveknight"];
 
             return null;
         }
@@ -192,7 +211,7 @@ namespace RemoveHauntedFoes
         {
 #if DEBUG_MESSAGES
             Log(msg);
-            Debug.Log("[RemoveHauntedFoes] - " + msg);
+            Debug.Log("[BetterGodhomeMusic] - " + msg);
 #endif
         }
     }
