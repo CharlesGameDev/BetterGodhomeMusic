@@ -26,8 +26,8 @@ namespace BetterGodhomeMusic
         bool ABSRAD = true;
         bool HIVEKNIGHT = true;
 
-        new public string GetName() => "Remove Haunted Foes";
-        public override string GetVersion() => "v1.0.0.2";
+        new public string GetName() => "BetterGodhomeMusic";
+        public override string GetVersion() => "v1.0.0.3";
         public override void Initialize()
         {
             dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
