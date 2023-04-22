@@ -1,4 +1,4 @@
-﻿#define DEBUG_MESSAGES
+﻿//#define DEBUG_MESSAGES
 
 using Modding;
 using System;
@@ -25,9 +25,10 @@ namespace BetterGodhomeMusic
         bool NOSK = true;
         bool ABSRAD = true;
         bool HIVEKNIGHT = true;
+        bool FK = true;
 
         new public string GetName() => "BetterGodhomeMusic";
-        public override string GetVersion() => "v1.0.0.3";
+        public override string GetVersion() => "v1.0.0.4";
         public override void Initialize()
         {
             dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -132,6 +133,23 @@ namespace BetterGodhomeMusic
                         true => 1,
                     }
                 },
+                new IMenuMod.MenuEntry {
+                    Name = "Failed Champion",
+                    Description = "Use new False Knight/Failed Champion music",
+                    Values = new string[] {
+                        "Off",
+                        "On"
+                    },
+                    Saver = opt => FK = opt switch {
+                        0 => false,
+                        1 => true,
+                        _ => throw new InvalidOperationException()
+                    },
+                    Loader = () => FK switch {
+                        false => 0,
+                        true => 1,
+                    }
+                },
             };
         }
 
@@ -165,6 +183,7 @@ namespace BetterGodhomeMusic
             if (NOSK && ((name == "GG Sad" || name == "MimicSpider") && (currentScene == "GG_Nosk_Hornet" || currentScene == "GG_Nosk"))) return musicDict["nosk"];
             if (ABSRAD && name == "Radiance" && currentScene == "GG_Radiance") return musicDict["absrad"];
             if (HIVEKNIGHT && (name == "HiveKnight" || name == "GG Normal") && currentScene == "GG_Hive_Knight") return musicDict["hiveknight"];
+            if (FK && (name == "FalseKnight" || name == "Boss1" || name == "GG Heavy") && (currentScene == "GG_Failed_Champion" || currentScene == "GG_False_Knight")) return musicDict["falseknight"];
 
             return null;
         }

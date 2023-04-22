@@ -8,8 +8,8 @@
 		<Product>BetterGodhomeMusic</Product>
 		<Description>A Hollow Knight mod.</Description>
 		<Copyright>Copyright © </Copyright>
-		<AssemblyVersion>1.0.0.3</AssemblyVersion>
-		<FileVersion>1.0.0.3</FileVersion>
+		<AssemblyVersion>1.0.0.4</AssemblyVersion>
+		<FileVersion>1.0.0.4</FileVersion>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
