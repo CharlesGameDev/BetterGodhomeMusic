@@ -1,4 +1,4 @@
-﻿//#define DEBUG_MESSAGES
+﻿#define DEBUG_MESSAGES
 
 using Modding;
 using System;
@@ -26,6 +26,7 @@ namespace BetterGodhomeMusic
         bool ABSRAD = true;
         bool HIVEKNIGHT = true;
         bool FK = true;
+        bool LK = true;
 
         new public string GetName() => "BetterGodhomeMusic";
         public override string GetVersion() => "v1.0.0.4";
@@ -150,6 +151,23 @@ namespace BetterGodhomeMusic
                         true => 1,
                     }
                 },
+                new IMenuMod.MenuEntry {
+                    Name = "Lost Kin",
+                    Description = "Use new Broken Vessel/Lost Kin music",
+                    Values = new string[] {
+                        "Off",
+                        "On"
+                    },
+                    Saver = opt => LK = opt switch {
+                        0 => false,
+                        1 => true,
+                        _ => throw new InvalidOperationException()
+                    },
+                    Loader = () => LK switch {
+                        false => 0,
+                        true => 1,
+                    }
+                },
             };
         }
 
@@ -163,7 +181,7 @@ namespace BetterGodhomeMusic
             foreach (MusicCue.MusicChannelInfo info in infos)
             {
                 AudioClip possibleReplace = GetAudioClip(musicCue.name);
-                if (possibleReplace != null)
+                if (possibleReplace != null || musicCue.name == "None")
                 {
                     ReflectionHelper.SetField(info, "clip", possibleReplace);
                     changed = true;
@@ -184,6 +202,7 @@ namespace BetterGodhomeMusic
             if (ABSRAD && name == "Radiance" && currentScene == "GG_Radiance") return musicDict["absrad"];
             if (HIVEKNIGHT && (name == "HiveKnight" || name == "GG Normal") && currentScene == "GG_Hive_Knight") return musicDict["hiveknight"];
             if (FK && (name == "FalseKnight" || name == "Boss1" || name == "GG Heavy") && (currentScene == "GG_Failed_Champion" || currentScene == "GG_False_Knight")) return musicDict["falseknight"];
+            if (LK && (name == "BossIK" || name == "None") && (currentScene == "GG_Lost_Kin" || currentScene == "GG_Broken_Vessel")) return musicDict["lostkin"];
 
             return null;
         }
