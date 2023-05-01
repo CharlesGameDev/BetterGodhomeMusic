@@ -8,8 +8,8 @@
 		<Product>BetterGodhomeMusic</Product>
 		<Description>A Hollow Knight mod.</Description>
 		<Copyright>Copyright © </Copyright>
-		<AssemblyVersion>1.0.0.5</AssemblyVersion>
-		<FileVersion>1.0.0.5</FileVersion>
+		<AssemblyVersion>1.0.0.6</AssemblyVersion>
+		<FileVersion>1.0.0.6</FileVersion>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
@@ -53,7 +53,6 @@
 		<PropertyGroup>
 			<OutputFileString>$(AssemblyVersion)</OutputFileString>
 		</PropertyGroup>
-		<WriteLinesToFile File="Version.txt" Lines="$(OutputFileString)" Overwrite="true" Encoding="UTF-8" />
 	</Target>
 	<ItemGroup>
 		<ResItemsMusic Include="Resources/Music/*.wav" />

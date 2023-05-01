@@ -27,9 +27,10 @@ namespace BetterGodhomeMusic
         bool HIVEKNIGHT = true;
         bool FK = true;
         bool LK = true;
+        bool PV = true;
 
         new public string GetName() => "BetterGodhomeMusic";
-        public override string GetVersion() => "v1.0.0.4";
+        public override string GetVersion() => Assembly.GetAssembly(typeof(BetterGodhomeMusic)).GetName().Version.ToString();
         public override void Initialize()
         {
             dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -168,6 +169,23 @@ namespace BetterGodhomeMusic
                         true => 1,
                     }
                 },
+                new IMenuMod.MenuEntry {
+                    Name = "Pure Vessel",
+                    Description = "Use new Pure Vessel music",
+                    Values = new string[] {
+                        "Off",
+                        "On"
+                    },
+                    Saver = opt => PV = opt switch {
+                        0 => false,
+                        1 => true,
+                        _ => throw new InvalidOperationException()
+                    },
+                    Loader = () => PV switch {
+                        false => 0,
+                        true => 1,
+                    }
+                },
             };
         }
 
@@ -203,6 +221,7 @@ namespace BetterGodhomeMusic
             if (HIVEKNIGHT && (name == "HiveKnight" || name == "GG Normal") && currentScene == "GG_Hive_Knight") return musicDict["hiveknight"];
             if (FK && (name == "FalseKnight" || name == "Boss1" || name == "GG Heavy") && (currentScene == "GG_Failed_Champion" || currentScene == "GG_False_Knight")) return musicDict["falseknight"];
             if (LK && (name == "BossIK" || name == "None") && (currentScene == "GG_Lost_Kin" || currentScene == "GG_Broken_Vessel")) return musicDict["lostkin"];
+            if (PV && name == "HollowKnightPrime" && currentScene == "GG_Hollow_Knight") return musicDict["purevessel"];
 
             return null;
         }
