@@ -34,7 +34,7 @@ namespace BetterGodhomeMusic
         public override void Initialize()
         {
             dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            musicDir = dir + "\\Resources\\Music";
+            musicDir = Directory.Exists(dir + "\\Resources\\Music") ? dir + "\\Resources\\Music" : dir + "/Resources/Music";
             musicDict = new Dictionary<string, AudioClip>();
             foreach (string file in Directory.GetFiles(musicDir))
             {
